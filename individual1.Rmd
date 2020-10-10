@@ -21,7 +21,8 @@ Part 1
 ```{r}
 defClean <- defense %>%
   mutate(Tackles_Solo = as.numeric(Tackles_Solo), Tackles_ASST = as.numeric(Tackles_ASST), Tackles_TFL = as.numeric(Tackles_TFL),Tackles_Sack = as.numeric(Tackles_Sack), Turnover_FF = as.numeric(Turnover_FF),Turnover_FR = as.numeric(Turnover_FR), Turnover_INT = as.numeric(Turnover_INT), Pass_QBH = as.numeric(Pass_QBH), Pass_PB =as.numeric(Pass_PB))
-#str(defClean)
+defClean$Name <- as.factor(unlist(defClean$Name))
+defClean$Opponent_Opponent <- as.factor(unlist(defClean$Opponent_Opponent))
 print(defClean)
 
 offClean <- offense %>%
