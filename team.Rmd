@@ -23,6 +23,7 @@ print(defClean)
 
 offClean <- offense %>%
   mutate(Rushing_ATT = as.numeric(Rushing_ATT),  Rushing_YDS=as.numeric(Rushing_YDS), Rushing_TD = as.numeric(Rushing_TD), Receiving_REC = as.numeric(Receiving_REC), Receiving_YDS = as.numeric(Receiving_YDS), Receiving_TD = as.numeric(Receiving_TD),`Passing_CMP-ATT` = as.numeric(`Passing_CMP-ATT`), Passing_YDS = as.numeric(Passing_YDS), Passing_TD = as.numeric(Passing_TD), Passing_INT = as.numeric(Passing_INT))
+offClean$Name <- as.factor(unlist(offClean$Name))
 #str(offClean)
 print(offClean)
 
@@ -76,5 +77,39 @@ str(def_bio)
 def_ISU <- def_bio[def_bio$Opponent_Opponent == "Iowa",]
 off_ISU <- off_bio[off_bio$Opponent_Opponent == "Iowa",]
 ISU <- inner_join(def_ISU, off_ISU)
+ISU
 print(unique(ISU$State))
 ```
+
+2.
+
+
+3.
+```{r}
+defense2 <- read_excel('../ds202_lab4/cyclonesFootball2018.xlsx', sheet='Defensive')
+str(defense2)
+offense2 <- read_excel('../ds202_lab4/cyclonesFootball2018.xlsx', sheet='Offensive')
+bio2 <- read_excel('../ds202_lab4/cyclonesFootball2018.xlsx', sheet='Biography')
+
+defClean2 <- defense2 %>%
+  mutate(Tackles_Solo = as.numeric(Tackles_Solo), Tackles_ASST = as.numeric(Tackles_ASST), Tackles_TFL = as.numeric(Tackles_TFL),Tackles_Sack = as.numeric(Tackles_Sack), Turnover_FF = as.numeric(Turnover_FF),Turnover_FR = as.numeric(Turnover_FR), Turnover_INT = as.numeric(Turnover_INT), Pass_QBH = as.numeric(Pass_QBH), Pass_PB =as.numeric(Pass_PB))
+defClean2$Name <- as.factor(unlist(defClean2$Name))
+defClean2$Opponent_Opponent <- as.factor(unlist(defClean2$Opponent_Opponent))
+
+
+offClean2 <- offense2 %>%
+  mutate(Rushing_ATT = as.numeric(Rushing_ATT),  Rushing_YDS=as.numeric(Rushing_YDS), Rushing_TD = as.numeric(Rushing_TD), Receiving_REC = as.numeric(Receiving_REC), Receiving_YDS = as.numeric(Receiving_YDS), Receiving_TD = as.numeric(Receiving_TD),`Passing_CMP-ATT` = as.numeric(`Passing_CMP-ATT`), Passing_YDS = as.numeric(Passing_YDS), Passing_TD = as.numeric(Passing_TD), Passing_INT = as.numeric(Passing_INT))
+offClean2$Name <- as.factor(unlist(offClean2$Name))
+#str(offClean)
+
+
+bioClean2 <- bio2 %>%
+  mutate(Weight = as.numeric(Weight)) %>%
+  separate(Height, c("Feet", "Inches"), sep='-') %>%
+  mutate(Feet = as.numeric(Feet), Inches = as.numeric(Inches)) %>%
+  mutate(Feet = as.numeric(Feet*12)) %>%
+  mutate(Feet = as.numeric(Feet*2.54), Inches =as.numeric(Inches*2.54)) %>%
+  mutate(Height = rowSums(.[3:4])) %>%
+  select(-c(Feet,Inches))
+```
+

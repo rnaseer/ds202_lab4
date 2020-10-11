@@ -410,11 +410,12 @@ print(defClean)</code></pre>
 ## i NAs introduced by coercion
 ## i Input `Passing_CMP-ATT` is `as.numeric(`Passing_CMP-ATT`)`.</code></pre>
 <pre><code>## Warning in mask$eval_all_mutate(dots[[i]]): NAs introduced by coercion</code></pre>
-<pre class="r"><code>#str(offClean)
+<pre class="r"><code>offClean$Name &lt;- as.factor(unlist(offClean$Name))
+#str(offClean)
 print(offClean)</code></pre>
 <pre><code>## # A tibble: 195 x 12
 ##    Name  Opponent_Oppone~ Rushing_ATT Rushing_YDS Rushing_TD Receiving_REC
-##    &lt;chr&gt; &lt;chr&gt;                  &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt;         &lt;dbl&gt;
+##    &lt;fct&gt; &lt;chr&gt;                  &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt;         &lt;dbl&gt;
 ##  1 Aker~ UNI                        0           0          0             1
 ##  2 Aker~ Iowa                       0           0          0             0
 ##  3 Aker~ ULM                        1           8          0             0
@@ -534,8 +535,72 @@ print(bioClean[1:5,5:6])</code></pre>
 off_ISU &lt;- off_bio[off_bio$Opponent_Opponent == &quot;Iowa&quot;,]
 ISU &lt;- inner_join(def_ISU, off_ISU)</code></pre>
 <pre><code>## Joining, by = c(&quot;Name&quot;, &quot;Opponent_Opponent&quot;, &quot;Position&quot;, &quot;Weight&quot;, &quot;Class&quot;, &quot;City&quot;, &quot;State&quot;, &quot;Highschool&quot;, &quot;Height&quot;)</code></pre>
+<pre class="r"><code>ISU</code></pre>
+<pre><code>## # A tibble: 54 x 21
+##    Name  Opponent_Oppone~ stat  score Position Weight Class City  State
+##    &lt;chr&gt; &lt;chr&gt;            &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
+##  1 Aker~ Iowa             Tack~     1 Wide Re~    188 Reds~ Ceda~ &quot; Io~
+##  2 Aker~ Iowa             Tack~     0 Wide Re~    188 Reds~ Ceda~ &quot; Io~
+##  3 Aker~ Iowa             Tack~     0 Wide Re~    188 Reds~ Ceda~ &quot; Io~
+##  4 Aker~ Iowa             Tack~     0 Wide Re~    188 Reds~ Ceda~ &quot; Io~
+##  5 Aker~ Iowa             Turn~     0 Wide Re~    188 Reds~ Ceda~ &quot; Io~
+##  6 Aker~ Iowa             Turn~     0 Wide Re~    188 Reds~ Ceda~ &quot; Io~
+##  7 Aker~ Iowa             Turn~     0 Wide Re~    188 Reds~ Ceda~ &quot; Io~
+##  8 Aker~ Iowa             Pass~     0 Wide Re~    188 Reds~ Ceda~ &quot; Io~
+##  9 Aker~ Iowa             Pass~     0 Wide Re~    188 Reds~ Ceda~ &quot; Io~
+## 10 Soeh~ Iowa             Tack~     1 Tight E~    270 Reds~ Prai~ &quot; Ar~
+## # ... with 44 more rows, and 12 more variables: Highschool &lt;chr&gt;, Height &lt;dbl&gt;,
+## #   Rushing_ATT &lt;dbl&gt;, Rushing_YDS &lt;dbl&gt;, Rushing_TD &lt;dbl&gt;,
+## #   Receiving_REC &lt;dbl&gt;, Receiving_YDS &lt;dbl&gt;, Receiving_TD &lt;dbl&gt;,
+## #   `Passing_CMP-ATT` &lt;dbl&gt;, Passing_YDS &lt;dbl&gt;, Passing_TD &lt;dbl&gt;,
+## #   Passing_INT &lt;dbl&gt;</code></pre>
 <pre class="r"><code>print(unique(ISU$State))</code></pre>
 <pre><code>## [1] &quot; Iowa&quot;  &quot; Ark.&quot;  &quot; Mo.&quot;   &quot; Ga.&quot;   &quot; Okla.&quot; &quot; Kan.&quot;</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li></li>
+<li></li>
+</ol>
+<pre class="r"><code>defense2 &lt;- read_excel(&#39;../ds202_lab4/cyclonesFootball2018.xlsx&#39;, sheet=&#39;Defensive&#39;)
+str(defense2)</code></pre>
+<pre><code>## tibble [446 x 11] (S3: tbl_df/tbl/data.frame)
+##  $ Name             : chr [1:446] &quot;Eisworth, Greg&quot; &quot;Eisworth, Greg&quot; &quot;Eisworth, Greg&quot; &quot;Eisworth, Greg&quot; ...
+##  $ Opponent_Opponent: chr [1:446] &quot;Iowa&quot; &quot;Oklahoma&quot; &quot;Akron&quot; &quot;TCU&quot; ...
+##  $ Tackles_Solo     : chr [1:446] &quot;3&quot; &quot;6&quot; &quot;7&quot; &quot;6&quot; ...
+##  $ Tackles_ASST     : chr [1:446] &quot;3&quot; &quot;8&quot; &quot;2&quot; &quot;3&quot; ...
+##  $ Tackles_TFL      : chr [1:446] &quot;0&quot; &quot;1.0&quot; &quot;1.0&quot; &quot;0&quot; ...
+##  $ Tackles_Sack     : chr [1:446] &quot;0&quot; &quot;0&quot; &quot;0&quot; &quot;0&quot; ...
+##  $ Turnover_FF      : chr [1:446] &quot;0&quot; &quot;1&quot; &quot;0&quot; &quot;0&quot; ...
+##  $ Turnover_FR      : chr [1:446] &quot;0&quot; &quot;0&quot; &quot;0&quot; &quot;0&quot; ...
+##  $ Turnover_INT     : chr [1:446] &quot;0&quot; &quot;0&quot; &quot;0&quot; &quot;0&quot; ...
+##  $ Pass_QBH         : chr [1:446] &quot;0&quot; &quot;0&quot; &quot;0&quot; &quot;0&quot; ...
+##  $ Pass_PB          : chr [1:446] &quot;0&quot; &quot;0&quot; &quot;3&quot; &quot;0&quot; ...</code></pre>
+<pre class="r"><code>offense2 &lt;- read_excel(&#39;../ds202_lab4/cyclonesFootball2018.xlsx&#39;, sheet=&#39;Offensive&#39;)
+bio2 &lt;- read_excel(&#39;../ds202_lab4/cyclonesFootball2018.xlsx&#39;, sheet=&#39;Biography&#39;)
+
+defClean2 &lt;- defense2 %&gt;%
+  mutate(Tackles_Solo = as.numeric(Tackles_Solo), Tackles_ASST = as.numeric(Tackles_ASST), Tackles_TFL = as.numeric(Tackles_TFL),Tackles_Sack = as.numeric(Tackles_Sack), Turnover_FF = as.numeric(Turnover_FF),Turnover_FR = as.numeric(Turnover_FR), Turnover_INT = as.numeric(Turnover_INT), Pass_QBH = as.numeric(Pass_QBH), Pass_PB =as.numeric(Pass_PB))
+defClean2$Name &lt;- as.factor(unlist(defClean2$Name))
+defClean2$Opponent_Opponent &lt;- as.factor(unlist(defClean2$Opponent_Opponent))
+
+
+offClean2 &lt;- offense2 %&gt;%
+  mutate(Rushing_ATT = as.numeric(Rushing_ATT),  Rushing_YDS=as.numeric(Rushing_YDS), Rushing_TD = as.numeric(Rushing_TD), Receiving_REC = as.numeric(Receiving_REC), Receiving_YDS = as.numeric(Receiving_YDS), Receiving_TD = as.numeric(Receiving_TD),`Passing_CMP-ATT` = as.numeric(`Passing_CMP-ATT`), Passing_YDS = as.numeric(Passing_YDS), Passing_TD = as.numeric(Passing_TD), Passing_INT = as.numeric(Passing_INT))</code></pre>
+<pre><code>## Warning: Problem with `mutate()` input `Passing_CMP-ATT`.
+## i NAs introduced by coercion
+## i Input `Passing_CMP-ATT` is `as.numeric(`Passing_CMP-ATT`)`.</code></pre>
+<pre><code>## Warning in mask$eval_all_mutate(dots[[i]]): NAs introduced by coercion</code></pre>
+<pre class="r"><code>offClean2$Name &lt;- as.factor(unlist(offClean2$Name))
+#str(offClean)
+
+
+bioClean2 &lt;- bio2 %&gt;%
+  mutate(Weight = as.numeric(Weight)) %&gt;%
+  separate(Height, c(&quot;Feet&quot;, &quot;Inches&quot;), sep=&#39;-&#39;) %&gt;%
+  mutate(Feet = as.numeric(Feet), Inches = as.numeric(Inches)) %&gt;%
+  mutate(Feet = as.numeric(Feet*12)) %&gt;%
+  mutate(Feet = as.numeric(Feet*2.54), Inches =as.numeric(Inches*2.54)) %&gt;%
+  mutate(Height = rowSums(.[3:4])) %&gt;%
+  select(-c(Feet,Inches))</code></pre>
 
 
 
