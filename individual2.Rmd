@@ -58,10 +58,27 @@ bioClean <- biography %>%
 
 ```
 PART 2 
+1)
 ```{r}
 print(defClean)
-defClean %>% 
-  pivot_longer(Tackles_Solo:Pass_PB, names_to = "stat", values_to = "score" )
-  
-print(defClean)
+defClean<- defClean %>% 
+  pivot_longer(Tackles_Solo:Pass_PB, names_to = "stat", values_to = "score" ) 
+
+
+```
+2)
+```{r}
+table(defClean$stat, defClean$score > 0)
+```
+By viewing the score that are greater than Zero,  we can see that the Turnover Statistics are the rarest of the all the statistics
+
+3)Did ISU have better defense against Iowa or Notre Dame? Answer this question by creating a scatterplot with x- and y-axes being the number of solo tackles (of each player). A large number of solo tackles is an indicator of good defense.
+```{r}
+p3 <- defense %>% 
+  filter(Opponent_Opponent == "Iowa" | Opponent_Opponent == "Notre Dame" ) %>% 
+  pivot_longer(Tackles_Solo:Pass_PB, names_to = "stat", values_to = "score" ) %>% 
+  filter(stat == "Tackles_Solo") %>% 
+p3
+
+ggplot (p3, aes(x=Name, y = score)) + geom_point()
 ```
