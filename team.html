@@ -473,21 +473,19 @@ print(defClean)</code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li></li>
 </ol>
-<pre class="r"><code>table(defClean$stat, defClean$score)</code></pre>
+<pre class="r"><code>table(defClean$stat, defClean$score&gt;0)</code></pre>
 <pre><code>##               
-##                  0 0.5   1 1.5   2   3 3.5   4   5   6   7   8   9
-##   Pass_PB      462   0  34   0   4   2   0   0   0   0   0   0   0
-##   Pass_QBH     475   0  25   0   1   1   0   0   0   0   0   0   0
-##   Tackles_ASST 330   0  90   0  37  27   0   8   5   2   2   1   0
-##   Tackles_Sack 477   7  14   0   4   0   0   0   0   0   0   0   0
-##   Tackles_Solo 284   0 107   0  44  25   0  19  10   6   6   0   1
-##   Tackles_TFL  429  18  42   3   9   0   1   0   0   0   0   0   0
-##   Turnover_FF  492   0  10   0   0   0   0   0   0   0   0   0   0
-##   Turnover_FR  495   0   7   0   0   0   0   0   0   0   0   0   0
-##   Turnover_INT 496   0   6   0   0   0   0   0   0   0   0   0   0</code></pre>
-<ol start="4" style="list-style-type: decimal">
-<li></li>
-</ol>
+##                FALSE TRUE
+##   Pass_PB        462   40
+##   Pass_QBH       475   27
+##   Tackles_ASST   330  172
+##   Tackles_Sack   477   25
+##   Tackles_Solo   284  218
+##   Tackles_TFL    429   73
+##   Turnover_FF    492   10
+##   Turnover_FR    495    7
+##   Turnover_INT   496    6</code></pre>
+<p>Looking at stats that have values greater than 0,the Turnover statistics are more rare than the rest of the statistics. 4.</p>
 <pre class="r"><code>bioClean &lt;- bioClean %&gt;%
   separate(Hometown, c(&quot;City&quot;, &quot;State&quot;),sep=&#39;,&#39;)
 print(bioClean[1:5,5:6])</code></pre>

@@ -46,10 +46,9 @@ print(defClean)
 ```
 2.
 ```{r}
-table(defClean$stat, defClean$score)
-
+table(defClean$stat, defClean$score>0)
 ```
-
+Looking at stats that have values greater than 0,the Turnover statistics are more rare than the rest of the statistics.
 4.
 ```{r}
 bioClean <- bioClean %>%
