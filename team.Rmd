@@ -49,6 +49,12 @@ print(defClean)
 table(defClean$stat, defClean$score>0)
 ```
 Looking at stats that have values greater than 0,the Turnover statistics are more rare than the rest of the statistics.
+
+3.
+```{r}
+
+```
+
 4.
 ```{r}
 bioClean <- bioClean %>%
@@ -59,4 +65,16 @@ print(bioClean[1:5,5:6])
 5.
 ```{r}
 table(bioClean$State)
+```
+
+Part 3
+1.
+```{r}
+def_bio <- inner_join(defClean, bioClean)
+off_bio <- inner_join(offClean, bioClean)
+str(def_bio)
+def_ISU <- def_bio[def_bio$Opponent_Opponent == "Iowa",]
+off_ISU <- off_bio[off_bio$Opponent_Opponent == "Iowa",]
+ISU <- inner_join(def_ISU, off_ISU)
+print(unique(ISU$State))
 ```

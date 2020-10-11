@@ -485,7 +485,11 @@ print(defClean)</code></pre>
 ##   Turnover_FF    492   10
 ##   Turnover_FR    495    7
 ##   Turnover_INT   496    6</code></pre>
-<p>Looking at stats that have values greater than 0,the Turnover statistics are more rare than the rest of the statistics. 4.</p>
+<p>Looking at stats that have values greater than 0,the Turnover statistics are more rare than the rest of the statistics.</p>
+<ol start="3" style="list-style-type: decimal">
+<li></li>
+<li></li>
+</ol>
 <pre class="r"><code>bioClean &lt;- bioClean %&gt;%
   separate(Hometown, c(&quot;City&quot;, &quot;State&quot;),sep=&#39;,&#39;)
 print(bioClean[1:5,5:6])</code></pre>
@@ -508,6 +512,30 @@ print(bioClean[1:5,5:6])</code></pre>
 ##         35          3          4          4          1          6          7 
 ##      Okla.        Pa.       S.D.      Texas       Wis. 
 ##          2          1          2          6          6</code></pre>
+<p>Part 3 1.</p>
+<pre class="r"><code>def_bio &lt;- inner_join(defClean, bioClean)</code></pre>
+<pre><code>## Joining, by = &quot;Name&quot;</code></pre>
+<pre class="r"><code>off_bio &lt;- inner_join(offClean, bioClean)</code></pre>
+<pre><code>## Joining, by = &quot;Name&quot;</code></pre>
+<pre class="r"><code>str(def_bio)</code></pre>
+<pre><code>## tibble [3,114 x 11] (S3: tbl_df/tbl/data.frame)
+##  $ Name             : chr [1:3114] &quot;White, Lawrence&quot; &quot;White, Lawrence&quot; &quot;White, Lawrence&quot; &quot;White, Lawrence&quot; ...
+##  $ Opponent_Opponent: Factor w/ 13 levels &quot;Baylor&quot;,&quot;Iowa&quot;,..: 12 12 12 12 12 12 12 12 12 2 ...
+##  $ stat             : chr [1:3114] &quot;Tackles_Solo&quot; &quot;Tackles_ASST&quot; &quot;Tackles_TFL&quot; &quot;Tackles_Sack&quot; ...
+##  $ score            : num [1:3114] 4 4 0 0 0 0 0 1 1 4 ...
+##  $ Position         : chr [1:3114] &quot;Defensive Back&quot; &quot;Defensive Back&quot; &quot;Defensive Back&quot; &quot;Defensive Back&quot; ...
+##  $ Weight           : num [1:3114] 196 196 196 196 196 196 196 196 196 196 ...
+##  $ Class            : chr [1:3114] &quot;Redshirt Senior&quot; &quot;Redshirt Senior&quot; &quot;Redshirt Senior&quot; &quot;Redshirt Senior&quot; ...
+##  $ City             : chr [1:3114] &quot;Bakersfield&quot; &quot;Bakersfield&quot; &quot;Bakersfield&quot; &quot;Bakersfield&quot; ...
+##  $ State            : chr [1:3114] &quot; Calif.&quot; &quot; Calif.&quot; &quot; Calif.&quot; &quot; Calif.&quot; ...
+##  $ Highschool       : chr [1:3114] &quot;Ridgeview&quot; &quot;Ridgeview&quot; &quot;Ridgeview&quot; &quot;Ridgeview&quot; ...
+##  $ Height           : num [1:3114] 183 183 183 183 183 ...</code></pre>
+<pre class="r"><code>def_ISU &lt;- def_bio[def_bio$Opponent_Opponent == &quot;Iowa&quot;,]
+off_ISU &lt;- off_bio[off_bio$Opponent_Opponent == &quot;Iowa&quot;,]
+ISU &lt;- inner_join(def_ISU, off_ISU)</code></pre>
+<pre><code>## Joining, by = c(&quot;Name&quot;, &quot;Opponent_Opponent&quot;, &quot;Position&quot;, &quot;Weight&quot;, &quot;Class&quot;, &quot;City&quot;, &quot;State&quot;, &quot;Highschool&quot;, &quot;Height&quot;)</code></pre>
+<pre class="r"><code>print(unique(ISU$State))</code></pre>
+<pre><code>## [1] &quot; Iowa&quot;  &quot; Ark.&quot;  &quot; Mo.&quot;   &quot; Ga.&quot;   &quot; Okla.&quot; &quot; Kan.&quot;</code></pre>
 
 
 
