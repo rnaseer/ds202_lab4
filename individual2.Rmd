@@ -1,0 +1,67 @@
+---
+title: "Lab 1"
+author: "Ahmed Hassan"
+date: "10/10/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r initialization, echo=FALSE, include=FALSE}
+suppressPackageStartupMessages(require(ggplot2))
+suppressPackageStartupMessages(require(dplyr))
+suppressPackageStartupMessages(require(readxl))
+suppressPackageStartupMessages(require(tidyverse))
+suppressPackageStartupMessages(require(nycflights13))
+library(ggplot2)
+library(readxl)
+library(dplyr)
+library(tidyverse)
+
+
+defense <- read_excel('cyclonesFootball2019.xlsx', sheet='Defensive')
+offense <- read_excel('cyclonesFootball2019.xlsx', sheet='Offensive')
+biography <- read_excel('cyclonesFootball2019.xlsx', sheet='Biography')
+
+str(defense)
+```
+
+PART 1
+
+```{r}
+defense$Name <- as.factor(unlist(defense$Name))
+defense$Opponent_Opponent <- as.factor(unlist(defense$Opponent_Opponent))
+offense$Name <- as.factor(unlist(offense$Name))
+offense$Opponent_Opponent <- as.factor(unlist(offense$Opponent_Opponent))
+
+defClean <- defense %>%
+  mutate(Tackles_Solo = as.numeric(Tackles_Solo), Tackles_ASST = as.numeric(Tackles_ASST), Tackles_TFL = as.numeric(Tackles_TFL),Tackles_Sack = as.numeric(Tackles_Sack), Turnover_FF = as.numeric(Turnover_FF),Turnover_FR = as.numeric(Turnover_FR), Turnover_INT = as.numeric(Turnover_INT), Pass_QBH = as.numeric(Pass_QBH), Pass_PB =as.numeric(Pass_PB))
+#str(defClean)
+print(defClean)
+
+offClean <- offense %>%
+  mutate(Rushing_ATT = as.numeric(Rushing_ATT),  Rushing_YDS=as.numeric(Rushing_YDS), Rushing_TD = as.numeric(Rushing_TD), Receiving_REC = as.numeric(Receiving_REC), Receiving_YDS = as.numeric(Receiving_YDS), Receiving_TD = as.numeric(Receiving_TD),`Passing_CMP-ATT` = as.numeric(`Passing_CMP-ATT`), Passing_YDS = as.numeric(Passing_YDS), Passing_TD = as.numeric(Passing_TD), Passing_INT = as.numeric(Passing_INT))
+#str(offClean)
+print(offClean)
+
+bioClean <- biography %>%
+  mutate(Weight = as.numeric(Weight)) %>%
+  separate(Height, c("Feet", "Inches"), sep='-') %>%
+  mutate(Feet = as.numeric(Feet), Inches = as.numeric(Inches)) %>%
+  mutate(Feet = as.numeric(Feet*12)) %>%
+  mutate(Feet = as.numeric(Feet*2.54), Inches =as.numeric(Inches*2.54)) %>%
+  mutate(Height = rowSums(.[3:4])) %>%
+  select(-c(Feet,Inches))
+  print(bioClean)
+
+```
+PART 2 
+```{r}
+print(defClean)
+defClean %>% 
+  pivot_longer(Tackles_Solo:Pass_PB, names_to = "stat", values_to = "score" )
+  
+print(defClean)
+```
