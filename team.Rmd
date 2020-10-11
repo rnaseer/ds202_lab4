@@ -50,14 +50,14 @@ table(defClean$stat, defClean$score)
 
 ```
 
-5.
+4.
 ```{r}
 bioClean <- bioClean %>%
   separate(Hometown, c("City", "State"),sep=',')
 print(bioClean[1:5,5:6])
 ```
 
-6.
+5.
 ```{r}
 table(bioClean$State)
 ```
