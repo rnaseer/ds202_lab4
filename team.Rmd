@@ -1,0 +1,63 @@
+---
+title: "team"
+author: "Rabsa Naseer"
+date: "10/10/2020"
+output: html_document
+---
+```{r}
+library(readxl)
+library(tidyverse)
+defense <- read_excel('../ds202_lab4/cyclonesFootball2019.xlsx', sheet='Defensive')
+offense <- read_excel('../ds202_lab4/cyclonesFootball2019.xlsx', sheet='Offensive')
+bio <- read_excel('../ds202_lab4/cyclonesFootball2019.xlsx', sheet='Biography')
+```
+
+Part 1.
+1 - 3.
+```{r}
+defClean <- defense %>%
+  mutate(Tackles_Solo = as.numeric(Tackles_Solo), Tackles_ASST = as.numeric(Tackles_ASST), Tackles_TFL = as.numeric(Tackles_TFL),Tackles_Sack = as.numeric(Tackles_Sack), Turnover_FF = as.numeric(Turnover_FF),Turnover_FR = as.numeric(Turnover_FR), Turnover_INT = as.numeric(Turnover_INT), Pass_QBH = as.numeric(Pass_QBH), Pass_PB =as.numeric(Pass_PB))
+defClean$Name <- as.factor(unlist(defClean$Name))
+defClean$Opponent_Opponent <- as.factor(unlist(defClean$Opponent_Opponent))
+print(defClean)
+
+offClean <- offense %>%
+  mutate(Rushing_ATT = as.numeric(Rushing_ATT),  Rushing_YDS=as.numeric(Rushing_YDS), Rushing_TD = as.numeric(Rushing_TD), Receiving_REC = as.numeric(Receiving_REC), Receiving_YDS = as.numeric(Receiving_YDS), Receiving_TD = as.numeric(Receiving_TD),`Passing_CMP-ATT` = as.numeric(`Passing_CMP-ATT`), Passing_YDS = as.numeric(Passing_YDS), Passing_TD = as.numeric(Passing_TD), Passing_INT = as.numeric(Passing_INT))
+#str(offClean)
+print(offClean)
+
+bioClean <- bio %>%
+  mutate(Weight = as.numeric(Weight)) %>%
+  separate(Height, c("Feet", "Inches"), sep='-') %>%
+  mutate(Feet = as.numeric(Feet), Inches = as.numeric(Inches)) %>%
+  mutate(Feet = as.numeric(Feet*12)) %>%
+  mutate(Feet = as.numeric(Feet*2.54), Inches =as.numeric(Inches*2.54)) %>%
+  mutate(Height = rowSums(.[3:4])) %>%
+  select(-c(Feet,Inches))
+
+  print(bioClean)
+```
+Part 2
+1.
+```{r}
+defClean <- defClean %>%
+  pivot_longer(Tackles_Solo:Pass_PB, names_to = 'stat', values_to = 'score' )
+print(defClean)
+```
+2.
+```{r}
+table(defClean$stat, defClean$score)
+
+```
+
+5.
+```{r}
+bioClean <- bioClean %>%
+  separate(Hometown, c("City", "State"),sep=',')
+print(bioClean[1:5,5:6])
+```
+
+6.
+```{r}
+table(bioClean$State)
+```
