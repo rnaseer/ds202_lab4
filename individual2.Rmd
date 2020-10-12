@@ -1,33 +1,53 @@
 ---
-title: "team"
-author: "Rabsa & Ahmed"
+title: "Lab 1"
+author: "Ahmed Hassan"
 date: "10/10/2020"
 output: html_document
 ---
-```{r}
-library(readxl)
-library(tidyverse)
-defense <- read_excel('cyclonesFootball2019.xlsx', sheet='Defensive')
-offense <- read_excel('cyclonesFootball2019.xlsx', sheet='Offensive')
-bio <- read_excel('cyclonesFootball2019.xlsx', sheet='Biography')
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Part 1.
-1 - 3.
+```{r initialization, echo=FALSE, include=FALSE}
+suppressPackageStartupMessages(require(ggplot2))
+suppressPackageStartupMessages(require(dplyr))
+suppressPackageStartupMessages(require(readxl))
+suppressPackageStartupMessages(require(tidyverse))
+suppressPackageStartupMessages(require(nycflights13))
+library(ggplot2)
+library(readxl)
+library(dplyr)
+library(tidyverse)
+
+
+defense <- read_excel('cyclonesFootball2019.xlsx', sheet='Defensive')
+offense <- read_excel('cyclonesFootball2019.xlsx', sheet='Offensive')
+biography <- read_excel('cyclonesFootball2019.xlsx', sheet='Biography')
+
+str(defense)
+```
+
+PART 1
+1-3
+
 ```{r}
+defense$Name <- as.factor(unlist(defense$Name))
+defense$Opponent_Opponent <- as.factor(unlist(defense$Opponent_Opponent))
+offense$Name <- as.factor(unlist(offense$Name))
+offense$Opponent_Opponent <- as.factor(unlist(offense$Opponent_Opponent))
+
 defClean <- defense %>%
   mutate(Tackles_Solo = as.numeric(Tackles_Solo), Tackles_ASST = as.numeric(Tackles_ASST), Tackles_TFL = as.numeric(Tackles_TFL),Tackles_Sack = as.numeric(Tackles_Sack), Turnover_FF = as.numeric(Turnover_FF),Turnover_FR = as.numeric(Turnover_FR), Turnover_INT = as.numeric(Turnover_INT), Pass_QBH = as.numeric(Pass_QBH), Pass_PB =as.numeric(Pass_PB))
-defClean$Name <- as.factor(unlist(defClean$Name))
-defClean$Opponent_Opponent <- as.factor(unlist(defClean$Opponent_Opponent))
+#str(defClean)
 print(defClean)
 
 offClean <- offense %>%
   mutate(Rushing_ATT = as.numeric(Rushing_ATT),  Rushing_YDS=as.numeric(Rushing_YDS), Rushing_TD = as.numeric(Rushing_TD), Receiving_REC = as.numeric(Receiving_REC), Receiving_YDS = as.numeric(Receiving_YDS), Receiving_TD = as.numeric(Receiving_TD),`Passing_CMP-ATT` = as.numeric(`Passing_CMP-ATT`), Passing_YDS = as.numeric(Passing_YDS), Passing_TD = as.numeric(Passing_TD), Passing_INT = as.numeric(Passing_INT))
-offClean$Name <- as.factor(unlist(offClean$Name))
 #str(offClean)
 print(offClean)
 
-bioClean <- bio %>%
+bioClean <- biography %>%
   mutate(Weight = as.numeric(Weight)) %>%
   separate(Height, c("Feet", "Inches"), sep='-') %>%
   mutate(Feet = as.numeric(Feet), Inches = as.numeric(Inches)) %>%
@@ -35,31 +55,25 @@ bioClean <- bio %>%
   mutate(Feet = as.numeric(Feet*2.54), Inches =as.numeric(Inches*2.54)) %>%
   mutate(Height = rowSums(.[3:4])) %>%
   select(-c(Feet,Inches))
-
   print(bioClean)
+
 ```
-Part 2
-1.
+PART 2 
+1)
 ```{r}
+print(defClean)
+defClean<- defClean %>% 
+  pivot_longer(Tackles_Solo:Pass_PB, names_to = "stat", values_to = "score" ) 
 
-distinctDefense <- defense[1] %>% distinct()
-editBio <- bio[c(1,6)]
-distinctDefense<- inner_join(distinctDefense, editBio, by= "Name")
-distinctDefense %>% 
-  summarise(Name, Hometown)
-
-distinctOffense <- offense[1] %>% distinct()
-distinctOffense<- inner_join(distinctOffense, editBio, by= "Name")
-distinctOffense %>% 
-  summarise(Name, Hometown)
 
 ```
-2.
+2)
 ```{r}
-table(defClean$stat, defClean$score>0)
+table(defClean$stat, defClean$score > 0)
 ```
-Looking at stats that have values greater than 0,the Turnover statistics are more rare than the rest of the statistics.
-
+```
+By viewing the score that are greater than Zero,  we can see that the Turnover Statistics are the rarest of the all the statistics
+```
 3)Did ISU have better defense against Iowa or Notre Dame? Answer this question by creating a scatterplot with x- and y-axes being the number of solo tackles (of each player). A large number of solo tackles is an indicator of good defense.
 ```{r}
 p3 <- defense %>%  
@@ -83,23 +97,13 @@ ggplot(p3_Notre, aes(x= Name, y = score, color = Opponent_Opponent)) + geom_poin
 Based on the two graphs generated above, We can say that Isu head better defense against Notre Dame, having the most players acheiving multiple takcles within one game, compared to ISU
 
 ```
-4.
-```{r}
-bioClean <- bioClean %>%
-  separate(Hometown, c("City", "State"),sep=',')
-print(bioClean[1:5,5:6])
-```
+Part 3. 
 
-5.
-```{r}
-table(bioClean$State)
-```
-
-Part 3
 1.
 ```{r}
+
 distinctDefense <- defense[1] %>% distinct()
-editBio <- bio[c(1,6)]
+editBio <- biography[c(1,6)]
 distinctDefense<- inner_join(distinctDefense, editBio, by= "Name")
 distinctDefense %>% 
   summarise(Name, Hometown)
@@ -108,12 +112,12 @@ distinctOffense <- offense[1] %>% distinct()
 distinctOffense<- inner_join(distinctOffense, editBio, by= "Name")
 distinctOffense %>% 
   summarise(Name, Hometown)
+
 ```
 ```
 The Summary above gives each of the players hometowns
 ```
-2.
-
+2. 
 ```{r}
 offenseDF <- offense %>%  pivot_longer(Rushing_ATT:Passing_INT, names_to = 'Stat', values_to = 'offensiveScore')
 offenseDF <- na.omit(offenseDF)
@@ -138,7 +142,6 @@ purdyDF %>%
 ```
 As we can see from the 2 summaries shown above, one for the Offensive scores of all the iS players, and theother for Brock Purdy's personal Offensive Score, we cna conclude that as a quarterback, Brock's performance in terms of this Offensice scores are higher than that of the rest of the teams members. Brock's summary also shows that he acheived the maximum offensive scores per game compared to the rest of his team.
 ```
-
 3.
 ```{r}
 defense2 <- read_excel('cyclonesFootball2019.xlsx', sheet='Defensive')
@@ -167,3 +170,5 @@ bioClean2 <- bio2 %>%
   mutate(Height = rowSums(.[3:4])) %>%
   select(-c(Feet,Inches))
 ```
+
+
