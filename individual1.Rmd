@@ -39,24 +39,48 @@ bioClean <- bio %>%
   mutate(Height = rowSums(.[3:4])) %>%
   select(-c(Feet,Inches))
 
-  print(bioClean)
+print(bioClean)
+  
 ```
 
 Part 2
 1.
 ```{r}
+defClean <- defClean %>%
+  pivot_longer(Tackles_Solo:Pass_PB, names_to = 'stat', values_to = 'score' )
+print(defClean)
+```
+2.
+```{r}
+table(defClean$stat, defClean$score)
+
+```
+3. 
+```{r}
 
 ```
 
 
-5.
+4.
 ```{r}
 bioClean <- bioClean %>%
   separate(Hometown, c("City", "State"),sep=',')
 print(bioClean[1:5,5:6])
 ```
-6.
+5.
 ```{r}
 table(bioClean$State)
+```
+
+Part 3
+1.
+```{r}
+def_bio <- inner_join(defClean, bioClean)
+off_bio <- inner_join(offClean, bioClean)
+str(def_bio)
+def_ISU <- def_bio[def_bio$Opponent_Opponent == "Iowa",]
+off_ISU <- off_bio[off_bio$Opponent_Opponent == "Iowa",]
+ISU <- inner_join(def_ISU, off_ISU)
+print(unique(ISU$State))
 ```
 
